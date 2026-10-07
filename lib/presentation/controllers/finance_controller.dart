@@ -104,166 +104,8 @@ class FinanceController extends ChangeNotifier {
     'other-income': 'Другое',
   };
 
-  final List<Account> _accounts = [
-    const Account(
-      id: 'kaspi',
-      name: 'Kaspi Gold',
-      type: AccountType.card,
-      balance: 850000,
-      bankName: 'Kaspi Bank',
-    ),
-    const Account(
-      id: 'halyk',
-      name: 'Halyk',
-      type: AccountType.card,
-      balance: 370000,
-      bankName: 'Halyk Bank',
-    ),
-    const Account(
-      id: 'deposit',
-      name: 'Депозит',
-      type: AccountType.deposit,
-      balance: 580000,
-      bankName: 'Отбасы Банк',
-    ),
-    const Account(
-      id: 'cash',
-      name: 'Наличные',
-      type: AccountType.cash,
-      balance: 75600,
-    ),
-  ];
-
-  final List<FinanceTransaction> _transactions = [
-    FinanceTransaction(
-      id: 'tx-1',
-      type: FinanceTransactionType.expense,
-      amount: 12500,
-      accountId: 'kaspi',
-      categoryId: 'food',
-      title: 'Ужин',
-      person: 'Друзья',
-      date: DateTime(2026, 10, 4, 20, 15),
-    ),
-    FinanceTransaction(
-      id: 'tx-2',
-      type: FinanceTransactionType.income,
-      amount: 220000,
-      accountId: 'halyk',
-      categoryId: 'salary',
-      title: 'Зарплата',
-      person: 'Работа',
-      date: DateTime(2026, 10, 3, 12, 30),
-    ),
-    FinanceTransaction(
-      id: 'tx-3',
-      type: FinanceTransactionType.expense,
-      amount: 130000,
-      accountId: 'kaspi',
-      categoryId: 'housing',
-      title: 'Аренда квартиры',
-      date: DateTime(2026, 10, 2, 18),
-    ),
-    FinanceTransaction(
-      id: 'tx-4',
-      type: FinanceTransactionType.expense,
-      amount: 29500,
-      accountId: 'kaspi',
-      categoryId: 'food',
-      title: 'Продукты',
-      date: DateTime(2026, 10, 2, 14),
-    ),
-    FinanceTransaction(
-      id: 'tx-5',
-      type: FinanceTransactionType.expense,
-      amount: 25000,
-      accountId: 'kaspi',
-      categoryId: 'transport',
-      title: 'Транспорт',
-      date: DateTime(2026, 10, 1, 19),
-    ),
-    FinanceTransaction(
-      id: 'tx-6',
-      type: FinanceTransactionType.expense,
-      amount: 20400,
-      accountId: 'kaspi',
-      categoryId: 'subscriptions',
-      title: 'Подписки',
-      date: DateTime(2026, 10, 1, 11),
-    ),
-    FinanceTransaction(
-      id: 'tx-7',
-      type: FinanceTransactionType.income,
-      amount: 120000,
-      accountId: 'kaspi',
-      categoryId: 'freelance',
-      title: 'Фриланс',
-      date: DateTime(2026, 10, 1, 9),
-    ),
-    FinanceTransaction(
-      id: 'tx-8',
-      type: FinanceTransactionType.transfer,
-      amount: 50000,
-      accountId: 'halyk',
-      destinationAccountId: 'deposit',
-      title: 'В накопления',
-      date: DateTime(2026, 9, 30, 17),
-    ),
-    FinanceTransaction(
-      id: 'tx-9',
-      type: FinanceTransactionType.expense,
-      amount: 160000,
-      accountId: 'kaspi',
-      categoryId: 'housing',
-      title: 'Жильё',
-      date: DateTime(2026, 9, 15),
-    ),
-    FinanceTransaction(
-      id: 'tx-10',
-      type: FinanceTransactionType.income,
-      amount: 330000,
-      accountId: 'halyk',
-      categoryId: 'salary',
-      title: 'Зарплата',
-      date: DateTime(2026, 9, 10),
-    ),
-    FinanceTransaction(
-      id: 'tx-11',
-      type: FinanceTransactionType.expense,
-      amount: 195000,
-      accountId: 'kaspi',
-      categoryId: 'shopping',
-      title: 'Покупки',
-      date: DateTime(2026, 8, 18),
-    ),
-    FinanceTransaction(
-      id: 'tx-12',
-      type: FinanceTransactionType.income,
-      amount: 350000,
-      accountId: 'halyk',
-      categoryId: 'salary',
-      title: 'Зарплата',
-      date: DateTime(2026, 8, 10),
-    ),
-    FinanceTransaction(
-      id: 'tx-13',
-      type: FinanceTransactionType.expense,
-      amount: 145000,
-      accountId: 'kaspi',
-      categoryId: 'housing',
-      title: 'Жильё',
-      date: DateTime(2026, 7, 15),
-    ),
-    FinanceTransaction(
-      id: 'tx-14',
-      type: FinanceTransactionType.income,
-      amount: 310000,
-      accountId: 'halyk',
-      categoryId: 'salary',
-      title: 'Зарплата',
-      date: DateTime(2026, 7, 10),
-    ),
-  ];
+  final List<Account> _accounts = [];
+  final List<FinanceTransaction> _transactions = [];
 
   // ============================================================
   // LOAD / SAVE
@@ -279,7 +121,9 @@ class FinanceController extends ChangeNotifier {
     final saved = await storage.load();
 
     if (saved == null) {
-      await _save();
+      _transactions.clear();
+      _accounts.clear();
+      notifyListeners();
       return;
     }
 

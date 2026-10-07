@@ -115,7 +115,7 @@ class HiveFinanceRepository implements FinanceRepository {
       }
     }
 
-    if (accounts.isEmpty && rawLegacyBalances is Map) {
+    if (rawAccounts == null && rawLegacyBalances is Map) {
       accounts.addAll(_legacyAccountsFromBalances(rawLegacyBalances));
 
       await save(transactions: transactions, accounts: accounts);
@@ -166,44 +166,22 @@ class HiveFinanceRepository implements FinanceRepository {
   }
 
   List<Account> _legacyAccountsFromBalances(Map<dynamic, dynamic> balances) {
-    double balanceOf(String id, double fallback) {
-      final value = balances[id];
-
-      if (value is num) {
-        return value.toDouble();
-      }
-
-      return fallback;
-    }
-
+    const knownAccounts = <String, (String, AccountType, String?)>{
+      'kaspi': ('Kaspi Gold', AccountType.card, 'Kaspi'),
+      'halyk': ('Halyk', AccountType.card, 'Halyk Bank'),
+      'deposit': ('Депозит', AccountType.deposit, 'Отбасы банк'),
+      'cash': ('Наличные', AccountType.cash, null),
+    };
     return [
-      Account(
-        id: 'kaspi',
-        name: 'Kaspi Gold',
-        bankName: 'Kaspi',
-        type: AccountType.card,
-        balance: balanceOf('kaspi', 850000),
-      ),
-      Account(
-        id: 'halyk',
-        name: 'Halyk',
-        bankName: 'Halyk Bank',
-        type: AccountType.card,
-        balance: balanceOf('halyk', 370000),
-      ),
-      Account(
-        id: 'deposit',
-        name: 'Депозит',
-        bankName: 'Отбасы банк',
-        type: AccountType.deposit,
-        balance: balanceOf('deposit', 580000),
-      ),
-      Account(
-        id: 'cash',
-        name: 'Наличные',
-        type: AccountType.cash,
-        balance: balanceOf('cash', 75600),
-      ),
+      for (final entry in balances.entries)
+        if (entry.key is String && entry.value is num)
+          Account(
+            id: entry.key as String,
+            name: knownAccounts[entry.key]?.$1 ?? entry.key as String,
+            type: knownAccounts[entry.key]?.$2 ?? AccountType.other,
+            bankName: knownAccounts[entry.key]?.$3,
+            balance: (entry.value as num).toDouble(),
+          ),
     ];
   }
 

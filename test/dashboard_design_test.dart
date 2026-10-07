@@ -102,14 +102,14 @@ void main() {
   testWidgets('empty dashboard keeps its sections and chart', (tester) async {
     await tester.binding.setSurfaceSize(const Size(320, 700));
     addTearDown(() => tester.binding.setSurfaceSize(null));
-    final finance = FinanceController(repository: _SeededFinanceRepository([]));
-    await finance.load();
+    final finance = FinanceController();
     final router = await _showDashboard(
       tester,
       finance: finance,
       theme: AppTheme.light(AppThemePreset.navy),
     );
     expect(find.text('Добавь первый счёт'), findsOneWidget);
+    expect(find.text('0 ₸'), findsWidgets);
     expect(find.byType(SmoothLineChart), findsOneWidget);
     await tester.drag(
       find.byType(SingleChildScrollView),

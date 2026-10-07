@@ -9,6 +9,7 @@ import '../../data/services/receipt_image_service.dart';
 import '../../domain/entities/account.dart';
 import '../../domain/entities/finance_transaction.dart';
 import '../controllers/finance_controller.dart';
+import 'add_account_screen.dart';
 
 class AddTransactionScreen extends StatefulWidget {
   const AddTransactionScreen({super.key});
@@ -101,7 +102,15 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       ),
       body:
           accounts.isEmpty
-              ? const _NoAccountsState()
+              ? _NoAccountsState(
+                onAddAccount: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const AddAccountScreen(),
+                    ),
+                  );
+                },
+              )
               : SafeArea(
                 top: false,
                 bottom: false,
@@ -644,7 +653,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 }
 
 class _NoAccountsState extends StatelessWidget {
-  const _NoAccountsState();
+  final VoidCallback onAddAccount;
+
+  const _NoAccountsState({required this.onAddAccount});
 
   @override
   Widget build(BuildContext context) {
@@ -677,9 +688,15 @@ class _NoAccountsState extends StatelessWidget {
             const SizedBox(height: 7),
 
             Text(
-              'Добавь карту, наличные или депозит в разделе «Ещё → Счета».',
+              'Добавь первый счёт, чтобы записывать доходы, расходы и переводы.',
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 20),
+            FilledButton.icon(
+              onPressed: onAddAccount,
+              icon: const Icon(Icons.add_rounded),
+              label: const Text('Добавить счёт'),
             ),
           ],
         ),

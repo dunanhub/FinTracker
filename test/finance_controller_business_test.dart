@@ -37,6 +37,32 @@ FinanceTransaction transaction(
 
 void main() {
   test(
+    'new finance controller starts with zero balances and no records',
+    () async {
+      final repository = FakeFinanceRepository();
+      final finance = FinanceController(repository: repository);
+
+      expect(finance.accounts, isEmpty);
+      expect(finance.transactions, isEmpty);
+      expect(finance.totalBalance, 0);
+      expect(finance.monthlyIncome, 0);
+      expect(finance.monthlyExpense, 0);
+
+      await finance.load();
+      expect(finance.accounts, isEmpty);
+      expect(finance.transactions, isEmpty);
+      expect(finance.totalBalance, 0);
+      expect(finance.monthlyIncome, 0);
+      expect(finance.monthlyExpense, 0);
+      expect(
+        finance.analyticsSnapshot(AnalyticsPeriod.month).categories,
+        isEmpty,
+      );
+      expect(repository.saveCount, 0);
+    },
+  );
+
+  test(
     'expense, income and transfer update both balances and persist',
     () async {
       final repository = FakeFinanceRepository(accounts: [cash, bank]);

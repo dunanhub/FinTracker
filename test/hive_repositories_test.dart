@@ -9,6 +9,7 @@ import 'package:fin_tracker/domain/entities/budget.dart';
 import 'package:fin_tracker/domain/entities/debt.dart';
 import 'package:fin_tracker/domain/entities/finance_transaction.dart';
 import 'package:fin_tracker/domain/entities/savings_goal.dart';
+import 'package:fin_tracker/presentation/controllers/finance_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 
@@ -22,6 +23,76 @@ void main() {
     await Hive.close();
     await directory.delete(recursive: true);
   });
+
+  test('new user scope has no financial records', () async {
+    final finance = HiveFinanceRepository();
+    final budgets = HiveBudgetRepository();
+    final goals = HiveGoalRepository();
+    final debts = HiveDebtRepository();
+    await finance.init(scope: 'new-user');
+    await budgets.init(scope: 'new-user');
+    await goals.init(scope: 'new-user');
+    await debts.init(scope: 'new-user');
+
+    expect(await finance.load(), isNull);
+    expect(finance.hasStoredData, isFalse);
+    expect(await budgets.load(), isEmpty);
+    expect(await goals.load(), isEmpty);
+    expect(await debts.load(), isEmpty);
+    expect(budgets.hasStoredData, isFalse);
+    expect(goals.hasStoredData, isFalse);
+    expect(debts.hasStoredData, isFalse);
+
+    final controller = FinanceController(repository: finance);
+    await controller.load();
+    expect(controller.accounts, isEmpty);
+    expect(controller.transactions, isEmpty);
+    expect(finance.hasStoredData, isFalse);
+  });
+
+  test(
+    'legacy balance migration creates only accounts actually stored',
+    () async {
+      final box = await Hive.openBox<dynamic>(
+        'fintracker_finance_partial-legacy',
+      );
+      await box.put('account_balances', {
+        'cash': 0,
+        'halyk': 1250,
+        'custom': 42,
+      });
+
+      final repository = HiveFinanceRepository();
+      await repository.init(scope: 'partial-legacy');
+      final loaded = (await repository.load())!;
+      expect(loaded.transactions, isEmpty);
+      expect(loaded.accounts.map((account) => account.id), [
+        'cash',
+        'halyk',
+        'custom',
+      ]);
+      expect(loaded.accounts.first.balance, 0);
+      expect(loaded.accounts.last.type, AccountType.other);
+      expect(box.containsKey('account_balances'), isFalse);
+    },
+  );
+
+  test(
+    'an explicitly empty account list is not repopulated by legacy data',
+    () async {
+      final box = await Hive.openBox<dynamic>(
+        'fintracker_finance_empty-legacy',
+      );
+      await box.put('accounts_v2', <dynamic>[]);
+      await box.put('account_balances', {'kaspi': 850000});
+
+      final repository = HiveFinanceRepository();
+      await repository.init(scope: 'empty-legacy');
+      final loaded = (await repository.load())!;
+      expect(loaded.accounts, isEmpty);
+      expect(box.containsKey('account_balances'), isTrue);
+    },
+  );
 
   test(
     'finance round trip preserves account and transaction metadata',

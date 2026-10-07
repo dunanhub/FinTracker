@@ -28,7 +28,7 @@
 | Camera / gallery | Выполнено | `image_picker`, локальный файл чека и облачная копия | [`receipt_image_service.dart`](../lib/data/services/receipt_image_service.dart) |
 | Sensors | Выполнено | `userAccelerometer`, порог и cooldown для Shake to Add | [`shake_detector_service.dart`](../lib/data/services/shake_detector_service.dart), [`main_shell.dart`](../lib/presentation/shell/main_shell.dart) |
 | Own Kotlin Platform Channel | Выполнено | `getBatteryInfo`, `getDeviceInfo` | [`MainActivity.kt`](../android/app/src/main/kotlin/com/example/fin_tracker/MainActivity.kt), [`platform_native_device_repository.dart`](../lib/data/repositories/platform_native_device_repository.dart) |
-| Tests > 40% | Выполнено | 77 тестов, LCOV 49,50%, порог 40% | [`testing.md`](testing.md), [`check_coverage.dart`](../tool/check_coverage.dart) |
+| Tests > 40% | Выполнено | 85 тестов, LCOV 54,60%, порог 40% | [`testing.md`](testing.md), [`check_coverage.dart`](../tool/check_coverage.dart) |
 | Performance review | Выполнено как аудит | Оптимизации графика, карты, миниатюры; измерения FPS/памяти остаются ручной проверкой | [`performance.md`](performance.md) |
 | Firebase Crashlytics | Выполнено для Android | Глобальные обработчики и тестовая non-fatal ошибка; debug collection выключен | [`crash_reporting_service.dart`](../lib/data/services/crash_reporting_service.dart), [`main.dart`](../lib/main.dart) |
 | CI/CD | Частично: CI | GitHub Actions проверяет код и собирает debug APK/Web; автоматического deploy нет | [`ci.yml`](../.github/workflows/ci.yml), [успешный запуск](https://github.com/dunanhub/FinTracker/actions/runs/37673945899) |

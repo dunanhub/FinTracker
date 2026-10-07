@@ -1,6 +1,6 @@
 # Тестирование FinTracker
 
-Проверено локально 8 октября 2026 года: **77 тестов прошли**, LCOV: **49,50%** (`4872 / 9842` строк, 73 включённых файла). Порог проекта — **40%**. Число относится к `coverage/lcov.info`: Flutter не включает в него каждый нетронутый файл `lib`.
+Проверено локально 8 октября 2026 года: **85 тестов прошли**, LCOV: **54,60%** (`5378 / 9850` строк, 73 включённых файла). Порог проекта — **40%**. Число относится к `coverage/lcov.info`: Flutter не включает в него каждый нетронутый файл `lib`.
 
 ## Команды
 
@@ -23,6 +23,7 @@ flutter build web
 | Бюджеты, цели, долги | Пополнение цели, погашение долга и учёт суммы: `budget_goal_debt_business_test.dart`, `finance_features_widget_test.dart` |
 | Hive и чек | Чтение старых записей, независимые локальный/облачный пути, ошибки загрузки: `hive_repositories_test.dart`, `receipt_persistence_test.dart`, `sync_receipt_failure_test.dart` |
 | Графики и Dashboard | Даты и суммы, жесты, пустые данные, темы, узкий экран: `chart_interaction_test.dart`, `dashboard_design_test.dart` |
+| Первый запуск | Пустые Hive scope и контроллеры, создание первого счёта, отсутствие счёта при операции, пустые экраны: `hive_repositories_test.dart`, `finance_controller_business_test.dart`, `empty_finance_state_test.dart` |
 | Riverpod и диагностика | Async состояния валют, конвертация, MethodChannel и ошибки: `currency_rates_provider_test.dart`, `currency_and_diagnostics_widget_test.dart`, `device_diagnostics_test.dart` |
 | Уведомления, датчик, Crashlytics | Планирование, история по UID, FCM дедупликация, порог/cooldown, fake crash reporter: `notification_center_test.dart`, `shake_detector_service_test.dart`, `crash_reporting_service_test.dart` |
 | Настройки и калькулятор | Сохранение темы/датчика, режимы расчёта: `settings_calculator_test.dart` |

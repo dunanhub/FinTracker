@@ -118,12 +118,13 @@ class _AddAccountScreenState extends State<AddAccountScreen> {
 
           const SizedBox(height: 18),
 
-          Container(
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
+          Material(
+            color: theme.colorScheme.surface,
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(22),
-              border: Border.all(color: theme.colorScheme.outlineVariant),
+              side: BorderSide(color: theme.colorScheme.outlineVariant),
             ),
+            clipBehavior: Clip.antiAlias,
             child: SwitchListTile(
               value: _includeInTotal,
               onChanged: (value) {

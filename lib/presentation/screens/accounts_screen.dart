@@ -50,7 +50,7 @@ class AccountsScreen extends StatelessWidget {
             const SizedBox(height: 26),
 
             if (accounts.isEmpty)
-              const _EmptyAccounts()
+              _EmptyAccounts(onAdd: () => _openAdd(context))
             else
               ...List.generate(accounts.length, (index) {
                 return Padding(
@@ -88,7 +88,7 @@ class AccountsScreen extends StatelessWidget {
           _openAdd(context);
         },
         icon: const Icon(Icons.add_rounded),
-        label: const Text('Добавить'),
+        label: Text(accounts.isEmpty ? 'Добавить счёт' : 'Добавить'),
       ),
     );
   }
@@ -243,7 +243,9 @@ class _AccountItem extends StatelessWidget {
 }
 
 class _EmptyAccounts extends StatelessWidget {
-  const _EmptyAccounts();
+  final VoidCallback onAdd;
+
+  const _EmptyAccounts({required this.onAdd});
 
   @override
   Widget build(BuildContext context) {
@@ -265,7 +267,7 @@ class _EmptyAccounts extends StatelessWidget {
 
           const SizedBox(height: 13),
 
-          Text('Пока нет счетов', style: theme.textTheme.titleMedium),
+          Text('У вас пока нет счетов', style: theme.textTheme.titleMedium),
 
           const SizedBox(height: 5),
 
@@ -273,6 +275,12 @@ class _EmptyAccounts extends StatelessWidget {
             'Добавь карту, наличные или депозит.',
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 18),
+          FilledButton.icon(
+            onPressed: onAdd,
+            icon: const Icon(Icons.add_rounded),
+            label: const Text('Добавить счёт'),
           ),
         ],
       ),
