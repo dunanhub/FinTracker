@@ -50,8 +50,15 @@ android/app/google-services.json
 
 # Android signing
 android/key.properties
+key.properties
 *.jks
 *.keystore
+*.pem
+*.p12
+*.pfx
+*service-account*.json
+*service_account*.json
+*firebase-adminsdk*.json
 
 # Environment files
 .env
