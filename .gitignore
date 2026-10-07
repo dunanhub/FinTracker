@@ -63,3 +63,5 @@ coverage/
 # Temporary context files
 camera_context.txt
 *_context.txt
+# Android generated build files
+/android/build/
